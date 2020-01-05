@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: emilevauge/whoami
-  tag: latest
+  repository: containous/whoami
+  tag: "{{ .Chart.AppVersion }}"
   pullPolicy: IfNotPresent
 
 service:
