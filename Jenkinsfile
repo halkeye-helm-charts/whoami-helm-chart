@@ -4,7 +4,7 @@ pipeline {
   options {
     timeout(time: 10, unit: 'MINUTES')
     ansiColor('xterm')
-    checkoutToSubdirectory('whoami-helm-chart')
+    checkoutToSubdirectory('whoami')
   }
 
   stages {
@@ -21,7 +21,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        dir('whoami-helm-chart') {
+        dir('whoami') {
           script {
             docker.image('dtzar/helm-kubectl').inside {
               sh 'helm init -c'
@@ -32,7 +32,7 @@ pipeline {
           stash(name:'helm-packages', allowEmpty: false, includes: '*.tgz')
         }
         dir('helm-charts') {
-          dir('whoami-helm-chart') {
+          dir('whoami') {
             unstash(name:'helm-packages')
           }
           script {
@@ -49,7 +49,7 @@ pipeline {
         dir('helm-charts') {
           sh 'git config --global user.email "jenkins@gavinmogan.com"'
           sh 'git config --global user.name "Jenkins"'
-          sh 'git add index.yaml whoami-helm-chart'
+          sh 'git add index.yaml whoami'
           sh 'git commit -m "Adding package"'
         }
       }
